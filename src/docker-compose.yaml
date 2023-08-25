@@ -1,0 +1,209 @@
+version: '3'
+
+networks:
+  mongonet:
+    driver: bridge
+
+services:
+  web:
+    image: lauromazzoni/rotten-potatoes:latest
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    networks:
+      mongonet:
+
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    ports:
+      - "27017:27017"
+    volumes:
+      - /mongovol:/data/db
+    networks:
+      mongonet:
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
+    networks:
+      - mongonet
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/
+
+
+
+
+
+
+
+
+# version: '3'
+# services:
+#   web:
+#     image: lauromazzoni/rotten-potatoes
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - db
+#     links:
+#       - db
+#   db:
+#     image: mongo:latest
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - /mongodb_data:/data/db
+#     environment:
+#       MONGODB_DATABASE: ${MONGODB_DB}
+#       MONGODB_HOSTNAME: ${MONGODB_HOST}
+#       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+#       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3'
+# services:
+
+#   flask:
+#     build: .
+#     container_name: flask
+#     image: lauromazzoni/rotten-potatoes
+#     restart: unless-stopped
+#     environment:
+#       APP_ENV: "prod"
+#       APP_DEBUG: "False"
+#       APP_PORT: 5000
+#       MONGODB_DATABASE: flaskdb
+#       MONGODB_USERNAME: mongouser
+#       MONGODB_PASSWORD: mongopwd
+#       MONGODB_HOSTNAME: mongodb
+#     depends_on:
+#       - mongodb
+#     networks:
+#       - backend
+
+#   mongodb:
+#     image: mongo:4.0.8
+#     container_name: mongodb
+#     restart: unless-stopped
+#     command: mongod --auth
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: mongouser
+#       MONGO_INITDB_ROOT_PASSWORD: mongopwd
+#       MONGO_INITDB_DATABASE: flaskdb
+#       MONGODB_DATA_DIR: /data/db
+#       MONDODB_LOG_DIR: /dev/null
+#     volumes:
+#       - mongodbdata:/data/db
+#     networks:
+#       - backend
+
+# networks:
+#   backend:
+#     driver: bridge
+
+# volumes:
+#   mongodbdata:
+#     driver: local
+#   appdata:
+#     driver: local
+#   nginxdata:
+#     driver: local
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3'
+
+# services:
+#   web:
+#     image: lauromazzoni/rotten-potatoes
+#     build: .
+#     command: python -u app.py
+#     ports:
+#       - 5000:5000
+#     links:
+#       - db
+
+#   db:
+#     image: mongo
+#     ports: 
+#       - 27017:27017
+#     volumes:
+#       - /volume:/data/db
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=mongouser
+#       - MONGO_INITDB_ROOT_PASSWORD=mongopwd
+
+#   # mongo-express:
+#   #   image: mongo-express
+#   #   ports:
+#   #     - 8081:8081
+#   #   environment:
+#   #     # ME_CONFIG_MONGODB_PORT: ${MONGODB_PORT}
+#   #     # - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+#   #     # - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+#   #     # - ME_CONFIG_MONGODB_SERVER=mongo
+#   #     # - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+#   #     # - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+#   #     # - ME_CONFIG_MONGODB_AUTH_PASSWORD=password
+#   #     - ME_CONFIG_MONGODB_URL=mongodb://mongouser:mongopwd@mongodb:27017/
+#   #     # - ME_CONFIG_BASICAUTH_USERNAME=mexpress
+#   #     # - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
+#   #   links:
+#   #     - mongodb
+#   #   networks:
+#   #     - mongo-compose-network
+#   #   depends_on:
+#   #     - mongodb
